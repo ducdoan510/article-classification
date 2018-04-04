@@ -76,7 +76,7 @@ def convert_html_to_text(row):
     text = re.sub(r'\s+', ' ', text)
     # print("----")
     # print(text)
-    return text
+    return text.lower()
 
 
 ##### PART II: Combine data into single csv file #####
