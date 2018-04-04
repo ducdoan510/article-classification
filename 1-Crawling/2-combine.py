@@ -81,9 +81,7 @@ def convert_html_to_text(row):
 
 ##### PART II: Combine data into single csv file #####
 
-data_folder = os.path.join("..", "data")
-if not os.path.exists(data_folder):
-    os.makedirs(data_folder)
+data_folder = os.path.join("..", "data", "csv")
 
 dfs = []
 for page in range(1, 103):
