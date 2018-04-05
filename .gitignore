@@ -1,5 +1,6 @@
 *.csv
 *.zip
 *.json
+*.pkl
 .idea/
 .env
