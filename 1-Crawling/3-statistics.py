@@ -20,7 +20,6 @@ for index, row in df.iterrows():
     for word in words:
         corpus.add(word.lower())
     total_words += len(words)
-    row['category'] = row['category'].split("_")[0]
 
 
 print("Statistics for collected data")
