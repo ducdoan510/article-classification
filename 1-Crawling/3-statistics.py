@@ -5,41 +5,31 @@ import pandas as pd
 from nltk.corpus import stopwords
 from sklearn.feature_extraction.text import CountVectorizer
 
-processed_data_path = os.path.join("..", "data", "data.csv")
-df = pd.read_csv(processed_data_path)
+processed_data_path = os.path.join("..", "data", "csv", "data.csv")
+df = pd.read_csv(processed_data_path).dropna(axis=0, subset=['text'])
+df.to_csv(processed_data_path, index=False, encoding='utf-8')
 
 f = open("summary.txt", "w")
 stdout = sys.stdout
 sys.stdout = f
 
-corpus = []
+corpus = set([])
+total_words = 0
 for index, row in df.iterrows():
-    corpus.append(row['text'])
+    words = row['text'].split()
+    for word in words:
+        corpus.add(word.lower())
+    total_words += len(words)
+    row['category'] = row['category'].split("_")[0]
 
-# min_df=10, stop_words=stopwords.words('english')
-vectorizer = CountVectorizer()
-X = vectorizer.fit_transform(corpus)
-count_result = X.toarray()
 
 print("Statistics for collected data")
 print("-----------------------------")
 
-print("Number of records: ", count_result.shape[0])
-print("Number of words: ", count_result.sum())
-print("Number of unique words: ", count_result.shape[1])
+print("Number of records: ", df.shape[0])
+print("Number of words: ", total_words)
+print("Number of unique words: ", len(corpus))
 
 sys.stdout = stdout
 f.close()
 
-# count_result_sum = count_result.sum(axis=0)
-# feature_names = vectorizer.get_feature_names()
-# lis = []
-# for feature in feature_names:
-#     index = vectorizer.vocabulary_.get(feature)
-#     lis.append([count_result_sum[index], feature])
-#
-# lis = sorted(lis)
-# for i in range(len(lis)):
-#     print(i, lis[i][1], lis[i][0])
-
-# print(vectorizer.stop_words_)
