@@ -3,36 +3,34 @@ import os
 import nltk
 
 stop_words = set(nltk.corpus.stopwords.words('english'))
-stemming = False
 lemmatizing = False
+remove_stop_words = False
 
 
 def format_text(row):
     text = row['text']
     text = text.lower()
 
-    if stemming:
-        stemmer = nltk.stem.PorterStemmer()
-        text = " ".join([stemmer.stem(word) for word in text.split() if word not in stop_words])
-    elif lemmatizing:
+    if lemmatizing:
         lemmatizer = nltk.stem.WordNetLemmatizer()
         text = " ".join([lemmatizer.lemmatize(word) for word in text.split() if word not in stop_words])
-    else:
+    elif remove_stop_words:
         text = " ".join([word for word in text.split() if word not in stop_words])
 
     return text
 
 
-option = input("Select one of the preprocess option below:\n1-stopwords\n2-stopwords + stemming\n3-stopwords + lemmatizing\n")
-if option.strip() == "2":
-    stemming = True
-    output_filename = "data_processed_stemmed.csv"
-elif option.strip() == "3":
-    lemmatizing = True
-    output_filename = "data_processed_lemmatized.csv"
+option = input("Select one of the option below (Enter 1 or 2):\n 1 - lowercase original text\n 2 (default) - lowercase original text, remove stop words, lemmatize text\n")
+if option == "1":
+    output_filename = "data_lowercase.csv"
 else:
+    lemmatizing = True
+    remove_stop_words = True
     output_filename = "data_processed.csv"
 
+# output_filename = "data_processed_train.csv"
+# lemmatizing = True
+# remove_stop_words = True
 
 data_path = os.path.join("..", "data", "csv")
 df = pd.read_csv(os.path.join(data_path, "data.csv"))

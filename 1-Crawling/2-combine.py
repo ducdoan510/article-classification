@@ -98,7 +98,7 @@ def convert_html_to_text(row):
     text = format_text(text, default)
     # print("----")
     # print(text)
-    return text
+    return text.lower()
 
 
 ##### PART II: Combine data into single csv file #####
@@ -107,7 +107,6 @@ dest_data_folder = os.path.join("..", "data", "csv")
 source_data_folder = "csv"
 
 csv_files = glob.glob(os.path.join(source_data_folder, "*.csv"))
-# csv_files = [os.path.join("csv", "politics_3.csv")]
 
 dfs = []
 for csv_file in csv_files:
@@ -118,9 +117,8 @@ for csv_file in csv_files:
 
     df = df[['description', 'publishedAt', 'source', 'title', 'url', 'urlToImage', 'text', 'category']]
     dfs.append(df)
-    # break
 
-combined_data = pd.concat(dfs)
+combined_data = pd.concat(dfs, ignore_index=True)
 combined_data['id'] = combined_data.index
 combined_data.to_csv(os.path.join(dest_data_folder, "data.csv"), index=False, encoding='utf-8')
 print(combined_data.shape)
