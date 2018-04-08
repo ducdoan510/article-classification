@@ -1,0 +1,63 @@
+Training data shape: (9401, 17575)
+Testing data shape: (1044, 17575)
+
+***Start training data with classifier: K Nearest Neighbors
+Training time for 9401 records: 0.0087
+Testing time for 1044 records: 1.5973
+Average accuracy: 0.853448275862
+Classification report:
+               precision    recall  f1-score   support
+
+     business     0.8109    0.7964    0.8036       280
+entertainment     0.8723    0.8913    0.8817        46
+     politics     0.8399    0.8839    0.8613       267
+        sport     0.9033    0.9346    0.9187       260
+   technology     0.8605    0.7749    0.8154       191
+
+  avg / total     0.8531    0.8534    0.8526      1044
+
+***Start training data with classifier: Support Vector Machine
+Training time for 9401 records: 184.0991
+Testing time for 1044 records: 18.3016
+Average accuracy: 0.877394636015
+Classification report:
+               precision    recall  f1-score   support
+
+     business     0.8763    0.8857    0.8810       280
+entertainment     1.0000    0.5000    0.6667        46
+     politics     0.7602    0.9738    0.8539       267
+        sport     0.9910    0.8500    0.9151       260
+   technology     0.9480    0.8586    0.9011       191
+
+  avg / total     0.8938    0.8774    0.8768      1044
+
+***Start training data with classifier: Decision Tree
+Training time for 9401 records: 1.6999
+Testing time for 1044 records: 0.0024
+Average accuracy: 0.925287356322
+Classification report:
+               precision    recall  f1-score   support
+
+     business     0.9025    0.8929    0.8977       280
+entertainment     0.9545    0.9130    0.9333        46
+     politics     0.9043    0.9551    0.9290       267
+        sport     0.9795    0.9192    0.9484       260
+   technology     0.9137    0.9424    0.9278       191
+
+  avg / total     0.9265    0.9253    0.9254      1044
+
+***Start training data with classifier: Ensemble Learning
+Training time for 9401 records: 185.2636
+Testing time for 1044 records: 20.0098
+Average accuracy: 0.926245210728
+Classification report:
+               precision    recall  f1-score   support
+
+     business     0.8990    0.9214    0.9101       280
+entertainment     1.0000    0.8478    0.9176        46
+     politics     0.8792    0.9813    0.9274       267
+        sport     0.9833    0.9077    0.9440       260
+   technology     0.9556    0.9005    0.9272       191
+
+  avg / total     0.9297    0.9262    0.9264      1044
+
