@@ -4,6 +4,7 @@ import re
 import string
 
 import pandas as pd
+import sys
 from bs4 import BeautifulSoup
 from decouple import config
 from sklearn.externals import joblib
@@ -128,6 +129,9 @@ for csv_file in csv_files:
 
     df = df[['description', 'publishedAt', 'source', 'title', 'url', 'urlToImage', 'text', 'category']]
     dfs.append(df)
+
+if len(dfs) == 0:
+    sys.exit("No more new articles...")
 
 combined_data = pd.concat(dfs, ignore_index=True)
 
