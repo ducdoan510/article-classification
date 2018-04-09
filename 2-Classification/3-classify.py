@@ -7,6 +7,7 @@ import sys
 from decouple import config
 from sklearn import metrics
 from sklearn.ensemble import VotingClassifier
+from sklearn.externals import joblib
 from sklearn.feature_extraction.text import CountVectorizer, TfidfTransformer
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.svm import SVC
@@ -44,6 +45,8 @@ X_train_count = vectorizer.fit_transform(train_corpus)
 transformer = TfidfTransformer(smooth_idf=False)
 X_train = transformer.fit_transform(X_train_count)
 
+joblib.dump(vectorizer, os.path.join(data_folder, 'pkl', 'vectorizer.pkl'))
+joblib.dump(transformer, os.path.join(data_folder, 'pkl', 'transformer.pkl'))
 
 # read test data
 df_test = pd.read_csv(os.path.join(data_folder, "csv", filename + "_test.csv"))
@@ -95,4 +98,6 @@ for i in range(0, len(classifiers)):
     confusion_matrix = metrics.confusion_matrix(target_test, predicted)
     np.save(os.path.join(data_folder, "npy", "%s_%s.npy" % (filename, classifiers_name[i])), confusion_matrix)
 
+    if i == len(classifiers) - 1:
+        joblib.dump(classifiers[i], os.path.join(data_folder, 'pkl', 'classifier.pkl'))
 

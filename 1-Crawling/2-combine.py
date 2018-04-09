@@ -6,7 +6,15 @@ import string
 import pandas as pd
 from bs4 import BeautifulSoup
 from decouple import config
+from sklearn.externals import joblib
 
+data_folder = config("DATA_FOLDER")
+categories = ["business", "entertainment", "politics", "sport", "technology"]
+is_first_time = not os.path.exists(os.path.join(data_folder, "csv", "data.csv"))
+if not is_first_time:
+    vectorizer = joblib.load(os.path.join(data_folder, 'pkl', 'vectorizer.pkl'))
+    transformer = joblib.load(os.path.join(data_folder, 'pkl', 'transformer.pkl'))
+    classifier = joblib.load(os.path.join(data_folder, 'pkl', 'classifier.pkl'))
 
 def get_main_content_identifier(source_name):
     if source_name == "ars-technica":
@@ -102,14 +110,15 @@ def convert_html_to_text(row):
     return text.lower()
 
 
-##### PART II: Combine data into single csv file #####
+def convert_category_to_string(row):
+    return categories[row['category'] - 1]
 
-data_folder = config("DATA_FOLDER")
 dest_data_folder = os.path.join(data_folder, "csv")
 source_data_folder = "csv"
 
 csv_files = glob.glob(os.path.join(source_data_folder, "*.csv"))
 
+# read data from each csv file in csv folder
 dfs = []
 for csv_file in csv_files:
     print("Reading file " + csv_file)
@@ -121,6 +130,24 @@ for csv_file in csv_files:
     dfs.append(df)
 
 combined_data = pd.concat(dfs, ignore_index=True)
-combined_data['id'] = combined_data.index
-combined_data.to_csv(os.path.join(dest_data_folder, "data.csv"), index=False, encoding='utf-8')
-print(combined_data.shape)
+
+# if not the first time, use existing model to predict category
+if not is_first_time:
+    corpus = []
+    for index, row in combined_data.iterrows():
+        corpus.append(row['text'])
+
+    X_counts = vectorizer.transform(corpus)
+    X = transformer.transform(X_counts)
+    combined_data['category'] = classifier.predict(X)
+    combined_data['category'] = combined_data.apply(convert_category_to_string, axis=1)
+
+# merge with existing data
+if is_first_time:
+    finalized_data = combined_data
+else:
+    existing = pd.read_csv(os.path.join(dest_data_folder, "data.csv"))
+    finalized_data = pd.concat([existing, combined_data], ignore_index=True)
+
+finalized_data['id'] = finalized_data.index
+finalized_data.to_csv(os.path.join(dest_data_folder, "data.csv"), index=False, encoding='utf-8')
