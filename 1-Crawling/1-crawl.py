@@ -4,14 +4,13 @@ import os
 
 import requests
 import time
-from bs4 import BeautifulSoup
 from newsapi import NewsApiClient
-import re
 import pandas as pd
 
 from decouple import config
 
 API_KEY = config('API_KEY')
+
 
 
 ##### PART I: Crawling data using API and BeautifulSoup ######

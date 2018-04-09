@@ -5,6 +5,7 @@ import string
 
 import pandas as pd
 from bs4 import BeautifulSoup
+from decouple import config
 
 
 def get_main_content_identifier(source_name):
@@ -103,7 +104,8 @@ def convert_html_to_text(row):
 
 ##### PART II: Combine data into single csv file #####
 
-dest_data_folder = os.path.join("..", "data", "csv")
+data_folder = config("DATA_FOLDER")
+dest_data_folder = os.path.join(data_folder, "csv")
 source_data_folder = "csv"
 
 csv_files = glob.glob(os.path.join(source_data_folder, "*.csv"))

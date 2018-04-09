@@ -3,6 +3,8 @@ import numpy as np
 import os
 import glob
 
+from decouple import config
+
 categories = ["business", "entertainment", "politics", "sport", "technology"]
 
 
@@ -31,7 +33,7 @@ def is_example(row):
     return False
 
 
-data_folder = os.path.join("..", "data")
+data_folder = config("DATA_FOLDER")
 
 df = pd.read_csv(os.path.join(data_folder, "csv", "data_processed_test.csv"))
 df['category_number'] = df.apply(convert_category_to_number, axis=1)
@@ -41,8 +43,6 @@ for predicted_file in predicted_files:
     method = predicted_file.split(os.sep)[-1].replace(".npy", "").replace(" ", "_").lower()
     df[method] = np.load(predicted_file)
     df[method.replace("predicted", "category")] = df.apply(convert_category_to_string, axis=1, args=(method,))
-
-print(df.columns)
 
 df['is_example'] = df.apply(is_example, axis=1)
 df = df[df['is_example'] == True][['id', 'url', 'text', 'category', 'category_decision_tree',

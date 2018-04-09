@@ -3,6 +3,8 @@ import os
 import numpy as np
 import pandas as pd
 import time
+import sys
+from decouple import config
 from sklearn import metrics
 from sklearn.ensemble import VotingClassifier
 from sklearn.feature_extraction.text import CountVectorizer, TfidfTransformer
@@ -22,13 +24,11 @@ def convert_category_to_number(row):
     return 5
 
 
-option = input("Select dataset to classify (Enter 1 or 2):\n1 - original data\n2 - processed data\n")
-
-if option == "1": filename = "data_lowercase"
+if len(sys.argv) >= 3: filename = sys.argv[2]
 else: filename = "data_processed"
 
 
-data_folder = os.path.join("..", "data")
+data_folder = config("DATA_FOLDER")
 
 # read train data
 df_train = pd.read_csv(os.path.join(data_folder, "csv", filename + "_train.csv"))
