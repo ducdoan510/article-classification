@@ -33,14 +33,27 @@ else:
 
 for key in source_ids.keys():
     if is_first_time:
-        number_of_articles = newsapi.get_everything(q=key, sources=','.join(source_ids[key]), language='en', sort_by='relevancy', page=1, page_size=100)['totalResults']
+        number_of_articles = newsapi.get_everything(q=key,
+                                                    sources=','.join(source_ids[key]),
+                                                    language='en',
+                                                    sort_by='relevancy',
+                                                    page=1,
+                                                    page_size=100)['totalResults']
     else:
-        number_of_articles = newsapi.get_everything(q=key, sources=','.join(source_ids[key]), language='en', sort_by='relevancy', page=1, page_size=100, from_parameter=datetime.date.today().strftime("%Y-%m-%d"))['totalResults']
+        number_of_articles = newsapi.get_everything(q=key,
+                                                    sources=','.join(source_ids[key]),
+                                                    language='en',
+                                                    sort_by='relevancy',
+                                                    page=1,
+                                                    page_size=100,
+                                                    from_parameter=(datetime.date.today() - datetime.timedelta(1)).strftime("%Y-%m-%d"),
+                                                    to=datetime.date.today().strftime("%Y-%m-%d"))['totalResults']
 
-    print("****Crawling articles of topic: %s" % key.upper())
+    print("****Crawling articles of topic: %s" % key)
 
     page = 1
     number_of_articles = min(number_of_articles, 3000) - (page - 1) * 100
+    print("%d articles" % number_of_articles)
     while number_of_articles > 0:
         print("Fetching page %d, page size %d" % (page, page_size))
 
@@ -52,13 +65,15 @@ for key in source_ids.keys():
                                              page=page,
                                              page_size=page_size)['articles']
         else:
-            articles = newsapi.get_everything(q=key,
+            articles_api = newsapi.get_everything(q=key,
                                               sources=','.join(source_ids[key]),
                                               language='en',
                                               sort_by='relevancy',
                                               page=page,
                                               page_size=page_size,
-                                              from_parameter=datetime.date.today().strftime("%Y-%m-%d"))['articles']
+                                              from_parameter=(datetime.date.today() - datetime.timedelta(1)).strftime("%Y-%m-%d"),
+                                              to=datetime.date.today().strftime("%Y-%m-%d"))
+            articles = articles_api['articles']
 
         for article in articles:
             print(article['title'], article['url'])
