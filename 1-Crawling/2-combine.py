@@ -115,7 +115,7 @@ def convert_category_to_string(row):
     return categories[row['category'] - 1]
 
 dest_data_folder = os.path.join(data_folder, "csv")
-source_data_folder = "csv"
+source_data_folder = config('DATA_COMPONENT_CSV_FOLDER')
 
 csv_files = glob.glob(os.path.join(source_data_folder, "*.csv"))
 
@@ -154,4 +154,6 @@ else:
     finalized_data = pd.concat([existing, combined_data], ignore_index=True)
 
 finalized_data['id'] = finalized_data.index
-finalized_data.to_csv(os.path.join(dest_data_folder, "data.csv"), index=False, encoding='utf-8')
+finalized_data.to_csv(os.path.join(dest_data_folder, "data_test.csv"), index=False, encoding='utf-8')
+print(finalized_data.shape)
+print(existing.shape)

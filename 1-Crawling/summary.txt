@@ -1,5 +1,0 @@
-Statistics for collected data
------------------------------
-Number of records:  10445
-Number of words:  10632724
-Number of unique words:  91531

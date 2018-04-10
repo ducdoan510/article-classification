@@ -85,7 +85,7 @@ for key in source_ids.keys():
                 if r.status_code == 200:
                     article['raw_html'] = r.content
                 else:
-                    print(r.status_code, end = " invalid status code ")
+                    print(r.status_code, end=" invalid status code ")
                     article['raw_html'] = article['description']
             except:
                 print("Error fetching url...")
@@ -96,7 +96,8 @@ for key in source_ids.keys():
         print("Finish preprocessing...Found %d articles" % len(articles))
 
         df = pd.DataFrame(articles)
-        df.to_csv(os.path.join("csv", "%s_%d.csv" % (key, page)), index=False)
+
+        df.to_csv(os.path.join(config('DATA_COMPONENT_CSV_FOLDER'), "%s_%d.csv" % (key, page)), index=False)
 
         page += 1
         number_of_articles -= page_size
